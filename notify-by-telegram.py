@@ -66,7 +66,8 @@ def validate_config(config):
 
 
 def setup_logging(args):
-    logging.basicConfig(format='%(levelname)s: %(message)s', level=args.loglevel, filename=args.logfile)
+    log_format = '%(asctime)s %(levelname)s: %(message)s' if args.logfile else '%(levelname)s: %(message)s'
+    logging.basicConfig(format=log_format, level=args.loglevel, filename=args.logfile)
 
 
 def markdown_escape(text):
