@@ -1,10 +1,10 @@
 # notify-by-telegram
-Send Nagios notifications to a Telegram channel.
+Send Nagios notifications to a [Telegram Messenger](https://telegram.org/) channel.
 
 
 ## Telegram bot
 
-This [tutorial](https://takersplace.de/2019/12/19/telegram-notifications-with-nagios/) explains how to create a Telegram bot. You'll need the *chat_id* and *auth_key* for the next section.
+This [tutorial](https://takersplace.de/2019/12/19/telegram-notifications-with-nagios/) explains how to create a Telegram bot. You'll need the `chat_id` and `auth_key` for the next section.
 
 ## Installation
 
@@ -12,10 +12,7 @@ _This guide has been written for [Debian](https://www.debian.org/). Some command
 
 Clone the repository:
 ```
-git clone https://github.com/jouir/notify-by-telegram.git
-sudo cp -p notify-by-telegram.py /usr/lib/nagios/plugins/notify-by-telegram.py
-sudo chmod 755 /usr/lib/nagios/plugins/notify-by-telegram.py
-sudo chown root:root /usr/lib/nagios/plugins/notify-by-telegram.py
+git clone https://github.com/jouir/notify-by-telegram.git /opt/notify-by-telegram
 ```
 
 Install dependencies using the package manager:
@@ -27,18 +24,15 @@ sudo apt install python3-jinja2 python3-requests
 
 Copy and update the configuration file example:
 ```
-sudo cp -p config.json.example /etc/nagios/telegram.json
-sudo chmod 640 root:nagios /etc/nagios/telegram.json
-```
-
-Add Nagios configurations:
-```
-sudo cp -p nagios.cfg /etc/nagios4/conf.d/telegram.cfg
+cp -p config.json.example telegram.json
+vim telegram.json
+sudo mv telegram.json /etc/nagios4/telegram.json
+sudo chmod 640 root:nagios /etc/nagios4/telegram.json
 ```
 
 Ensure Nagios reads the configuration file:
 ```
-grep cfg_dir=/etc/nagios4/conf.d /etc/nagios4/nagios.cfg
+echo "cfg_file=/opt/notify-by-telegram/nagios.cfg" >> /etc/nagios4/nagios.cfg
 ```
 
 Then reload service:
