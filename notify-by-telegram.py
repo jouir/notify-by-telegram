@@ -5,7 +5,7 @@ import logging
 import os
 
 import requests
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 
 logger = logging.getLogger(__name__)
 
@@ -78,15 +78,10 @@ def markdown_escape(text):
 
 def generate_host_payload(chat_id, args):
     payload = {'chat_id': chat_id, 'parse_mode': 'MarkdownV2'}
-    text = r"""\*\*\*\*\* Nagios \*\*\*\*\*
-*Notification Type:* {{notification_type}}
-*Host:* {{host_name}}
-*State:* {{host_state}}
-*Address:* {{host_address}}
-*Info:* {{host_output}}
-*Date/Time:* {{long_date_time}}
-"""
-    template = Template(text)
+    absolute_path = os.path.split(os.path.abspath(__file__))[0]
+    loader = FileSystemLoader(os.path.join(absolute_path, 'templates'))
+    env = Environment(loader=loader)
+    template = env.get_template('host.md.j2')
     text = template.render(notification_type=markdown_escape(args.notification_type),
                            host_name=markdown_escape(args.host_name), host_state=markdown_escape(args.host_state),
                            host_address=markdown_escape(args.host_address),
@@ -98,17 +93,10 @@ def generate_host_payload(chat_id, args):
 
 def generate_service_payload(chat_id, args):
     payload = {'chat_id': chat_id, 'parse_mode': 'MarkdownV2'}
-    text = r"""\*\*\*\*\* Nagios \*\*\*\*\*
-*Notification Type:* {{notification_type}}
-*Service:* {{service_desc}}
-*Host:* {{host_alias}}
-*Address:* {{host_address}}
-*State:* {{service_state}}
-*Date/Time:* {{long_date_time}}
-*Additional Info:*
-{{service_output}}
-"""
-    template = Template(text)
+    absolute_path = os.path.split(os.path.abspath(__file__))[0]
+    loader = FileSystemLoader(os.path.join(absolute_path, 'templates'))
+    env = Environment(loader=loader)
+    template = env.get_template('service.md.j2')
     text = template.render(notification_type=markdown_escape(args.notification_type),
                            service_desc=markdown_escape(args.service_desc), host_alias=markdown_escape(args.host_alias),
                            host_address=markdown_escape(args.host_address),
