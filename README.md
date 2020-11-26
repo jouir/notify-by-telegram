@@ -41,6 +41,15 @@ Then reload service:
 systemctl reload nagios4
 ```
 
+## Configuration file
+
+Format used is JSON with the following keys:
+
+* `chat_id`: where to send message on Telegram
+* `auth_key`: key used to authenticate on Telegram
+* `host_template` (optional): path to Markdown template file used for sending host notifications
+* `service_template` (optional): path to Markdown template file used for sending service notifications
+
 ## Logs
 
 Errors logs can be set with the `--logfile` argument.
