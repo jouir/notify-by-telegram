@@ -50,3 +50,23 @@ tail -f /var/log/nagios4/telegram.log
 ```
 
 Log level can be raised using `--verbose` or even more with `--debug` arguments.
+
+
+## Message format
+
+`notify-by-telegram` script uses the `MarkdownV2` format to generate Telegram messages.
+
+[Jinja](https://jinja.palletsprojects.com) is used for templating (eg. replace `{{host_name}}` placeholders by the value submitted by Nagios).
+
+Default **host** and **service** templates can be found in the [templates](templates) directory.
+
+They can be overriden in the configuration file:
+
+```json
+{
+  "host_template": "/etc/nagios4/host.md.j2",
+  "service_template": "/etc/nagios4/service.md.j2"
+}
+```
+
+Both options are optional.

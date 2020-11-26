@@ -1,4 +1,3 @@
-Add host and service templates to configuration file (+doc)
 Factorize the template rendering functions
 Use JSON schema to validate configuration file
 Add pre-commit Dockerfile and a doc to easily lint the code
