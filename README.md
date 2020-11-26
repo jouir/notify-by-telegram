@@ -15,7 +15,12 @@ Clone the repository:
 git clone https://github.com/jouir/notify-by-telegram.git /opt/notify-by-telegram
 ```
 
-Install dependencies using the package manager:
+Install dependencies using pip:
+```
+pip install -r requirements.txt
+```
+
+Or via the package manager:
 ```
 sudo apt install python3-jinja2 python3-requests python3-jsonschema
 ```
