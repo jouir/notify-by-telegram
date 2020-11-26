@@ -50,7 +50,7 @@ Format used is JSON with the following keys:
 * `host_template` (optional): path to Markdown template file used for sending host notifications
 * `service_template` (optional): path to Markdown template file used for sending service notifications
 
-## Logs
+## Logging
 
 Errors logs can be set with the `--logfile` argument.
 
@@ -80,3 +80,24 @@ They can be overriden in the configuration file:
 ```
 
 Both options are optional.
+
+### Host variables
+
+Variables replaced in the host template:
+* `notification_type` (= `$NOTIFICATIONTYPE$`)
+* `host_name` (= `$HOSTNAME$`)
+* `host_state` (= `$HOSTSTATE$`)
+* `host_address` (= `$HOSTADDRESS$`)
+* `host_output` (= `$HOSTOUTPUT$`)
+* `long_date_time` (= `$LONGDATETIME$`)
+
+### Service variables
+
+Variables replaced in the service template:
+* `notification_type` (= `$NOTIFICATIONTYPE$`)
+* `service_desc` (= `$SERVICEDESC$`)
+* `host_alias` (= `$HOSTALIAS$`)
+* `host_address` (= `$HOSTADDRESS$`)
+* `service_state` (= `$SERVICESTATE$`)
+* `long_date_time` (= `$LONGDATETIME$`)
+* `service_output` (= `$SERVICEOUTPUT$`)
