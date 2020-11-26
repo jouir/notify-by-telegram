@@ -76,43 +76,52 @@ def markdown_escape(text):
     return text
 
 
-def generate_host_payload(chat_id, args, template_file_name=None):
+def generate_payload(chat_id, message_type, message_variables, template_file_name=None):
     payload = {'chat_id': chat_id, 'parse_mode': 'MarkdownV2'}
+
+    # define jinja template name
     if not template_file_name:
+        template_name = 'host.md.j2' if message_type == 'host' else 'service.md.j2'
         absolute_path = os.path.split(os.path.abspath(__file__))[0]
-        template_file_name = os.path.join(absolute_path, 'templates', 'host.md.j2')
+        template_file_name = os.path.join(absolute_path, 'templates', template_name)
     template_path = os.path.dirname(os.path.abspath(template_file_name))
     template_name = os.path.basename(os.path.abspath(template_file_name))
+
+    # create a jinja file template
     loader = FileSystemLoader(template_path)
     env = Environment(loader=loader)
     template = env.get_template(template_name)
-    text = template.render(notification_type=markdown_escape(args.notification_type),
-                           host_name=markdown_escape(args.host_name), host_state=markdown_escape(args.host_state),
-                           host_address=markdown_escape(args.host_address),
-                           host_output=markdown_escape(args.host_output),
-                           long_date_time=markdown_escape(args.long_date_time))
+
+    # escape message variables
+    template_variables = {}
+    for key, value in message_variables.items():
+        template_variables[key] = markdown_escape(value)
+
+    # render template and update payload
+    text = template.render(**template_variables)
     payload['text'] = text
     return payload
 
 
-def generate_service_payload(chat_id, args, template_file_name=None):
-    payload = {'chat_id': chat_id, 'parse_mode': 'MarkdownV2'}
-    if not template_file_name:
-        absolute_path = os.path.split(os.path.abspath(__file__))[0]
-        template_file_name = os.path.join(absolute_path, 'templates', 'service.md.j2')
-    template_path = os.path.dirname(os.path.abspath(template_file_name))
-    template_name = os.path.basename(os.path.abspath(template_file_name))
-    loader = FileSystemLoader(template_path)
-    env = Environment(loader=loader)
-    template = env.get_template(template_name)
-    text = template.render(notification_type=markdown_escape(args.notification_type),
-                           service_desc=markdown_escape(args.service_desc), host_alias=markdown_escape(args.host_alias),
-                           host_address=markdown_escape(args.host_address),
-                           service_state=markdown_escape(args.service_state),
-                           long_date_time=markdown_escape(args.long_date_time),
-                           service_output=markdown_escape(args.service_output))
-    payload['text'] = text
-    return payload
+def generate_host_payload(chat_id, notification_type, host_name, host_state, host_address, host_output, long_date_time,
+                          template_file_name=None):
+    message_variables = {
+        'notification_type': notification_type, 'host_name': host_name, 'host_state': host_state,
+        'host_address': host_address, 'host_output': host_output, 'long_date_time': long_date_time
+    }
+    return generate_payload(chat_id=chat_id, message_type='host', message_variables=message_variables,
+                            template_file_name=template_file_name)
+
+
+def generate_service_payload(chat_id, notification_type, service_desc, host_alias, host_address, service_state,
+                             long_date_time, service_output, template_file_name=None):
+    message_variables = {
+        'notification_type': notification_type, 'service_desc': service_desc, 'host_alias': host_alias,
+        'host_address': host_address, 'service_state': service_state, 'long_date_time': long_date_time,
+        'service_output': service_output
+    }
+    return generate_payload(chat_id=chat_id, message_type='service', message_variables=message_variables,
+                            template_file_name=template_file_name)
 
 
 def send_message(auth_key, payload):
@@ -134,17 +143,23 @@ def main():
 
         logger.info('generating payload')
         if args.command == 'host':
-            payload = generate_host_payload(chat_id=config['chat_id'], args=args,
+            payload = generate_host_payload(chat_id=config['chat_id'], notification_type=args.notification_type,
+                                            host_name=args.host_name, host_state=args.host_state,
+                                            host_address=args.host_address, host_output=args.host_output,
+                                            long_date_time=args.long_date_time,
                                             template_file_name=config.get('host_template'))
         elif args.command == 'service':
-            payload = generate_service_payload(chat_id=config['chat_id'], args=args,
-                                            template_file_name=config.get('service_template'))
+            payload = generate_service_payload(chat_id=config['chat_id'], notification_type=args.notification_type,
+                                               service_desc=args.service_desc, host_alias=args.host_alias,
+                                               host_address=args.host_address, service_state=args.service_state,
+                                               long_date_time=args.long_date_time, service_output=args.service_output,
+                                               template_file_name=config.get('service_template'))
         else:
             raise NotImplementedError(f'command {args.command} not supported')
 
         logger.info('sending message to telegram api')
         send_message(auth_key=config['auth_key'], payload=payload)
-    except Exception as err:
+    except Exception:
         logger.exception('cannot execute program')
 
 
