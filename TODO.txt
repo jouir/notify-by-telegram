@@ -1,2 +1,1 @@
-Add pre-commit Dockerfile and a doc to easily lint the code
 Add requirements.txt file

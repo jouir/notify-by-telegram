@@ -101,3 +101,16 @@ Variables replaced in the service template:
 * `service_state` (= `$SERVICESTATE$`)
 * `long_date_time` (= `$LONGDATETIME$`)
 * `service_output` (= `$SERVICEOUTPUT$`)
+
+## How to contribute
+
+Contributions are welcomed! Feel free to update the code and create a pull-request.
+
+Be sure to lint the code before:
+```
+docker build -t pre-commit .
+docker run -it -v $(pwd):/mnt/ --rm pre-commit bash
+# cd /mnt/
+# pre-commit run --all-files
+# exit
+```
