@@ -27,7 +27,8 @@ Copy and update the configuration file example:
 cp -p config.json.example telegram.json
 vim telegram.json
 sudo mv telegram.json /etc/nagios4/telegram.json
-sudo chmod 640 root:nagios /etc/nagios4/telegram.json
+sudo chown root:nagios /etc/nagios4/telegram.json
+sudo chmod 640 /etc/nagios4/telegram.json
 ```
 
 Ensure Nagios reads the configuration file:
