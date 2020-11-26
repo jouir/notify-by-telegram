@@ -11,6 +11,8 @@ repos:
         args: ['--remove']
       - id: requirements-txt-fixer
       - id: trailing-whitespace
+      - id: check-json
+      - id: check-yaml
   - repo: https://gitlab.com/pycqa/flake8
     rev: master
     hooks:

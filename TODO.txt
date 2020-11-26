@@ -1,3 +1,2 @@
-Use JSON schema to validate configuration file
 Add pre-commit Dockerfile and a doc to easily lint the code
 Add requirements.txt file

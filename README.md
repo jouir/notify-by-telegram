@@ -17,14 +17,14 @@ git clone https://github.com/jouir/notify-by-telegram.git /opt/notify-by-telegra
 
 Install dependencies using the package manager:
 ```
-sudo apt install python3-jinja2 python3-requests
+sudo apt install python3-jinja2 python3-requests python3-jsonschema
 ```
 
 ## Configuration
 
 Copy and update the configuration file example:
 ```
-cp -p config.json.example telegram.json
+cp -p config.example.json telegram.json
 vim telegram.json
 sudo mv telegram.json /etc/nagios4/telegram.json
 sudo chown root:nagios /etc/nagios4/telegram.json

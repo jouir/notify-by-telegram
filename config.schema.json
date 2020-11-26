@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "chat_id": {
+      "type": "number"
+    },
+    "auth_key": {
+      "type": "string"
+    },
+    "host_template": {
+      "type": "string"
+    },
+    "service_template": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "chat_id",
+    "auth_key"
+  ]
+}

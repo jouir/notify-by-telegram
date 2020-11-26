@@ -6,8 +6,10 @@ import os
 
 import requests
 from jinja2 import Environment, FileSystemLoader
+from jsonschema import validate
 
 logger = logging.getLogger(__name__)
+absolute_path = os.path.split(os.path.abspath(__file__))[0]
 
 
 class InvalidConfigException(Exception):
@@ -60,9 +62,9 @@ def read_config(filename=None):
 def validate_config(config):
     if config is None:
         raise InvalidConfigException('config is not a dict')
-    for key in ['chat_id', 'auth_key']:
-        if key not in config:
-            raise InvalidConfigException(f'missing "{key}" key in config')
+    with open(os.path.join(absolute_path, 'config.schema.json'), 'r') as fd:
+        schema = json.loads(fd.read())
+        validate(instance=config, schema=schema)
 
 
 def setup_logging(args):
@@ -82,7 +84,6 @@ def generate_payload(chat_id, message_type, message_variables, template_file_nam
     # define jinja template name
     if not template_file_name:
         template_name = 'host.md.j2' if message_type == 'host' else 'service.md.j2'
-        absolute_path = os.path.split(os.path.abspath(__file__))[0]
         template_file_name = os.path.join(absolute_path, 'templates', template_name)
     template_path = os.path.dirname(os.path.abspath(template_file_name))
     template_name = os.path.basename(os.path.abspath(template_file_name))
