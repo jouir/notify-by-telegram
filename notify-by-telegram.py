@@ -73,7 +73,7 @@ def setup_logging(args):
 
 
 def markdown_escape(text):
-    for special_char in ['\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '#', '+', '-', '.', '!']:
+    for special_char in ['\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '#', '+', '-', '.', '!', '=']:
         text = text.replace(special_char, fr'\{special_char}')
     return text
 
