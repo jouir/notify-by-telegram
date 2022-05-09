@@ -30,7 +30,6 @@ def parse_arguments():
     # host notifications
     host_parser = subparsers.add_parser('host')
     host_parser.add_argument('--notification-type', help='nagios $NOTIFICATIONTYPE$', required=True)
-    host_parser.add_argument('--service-desc', help='nagios $SERVICEDESC$', required=True)
     host_parser.add_argument('--host-name', help='nagios $HOSTNAME$', required=True)
     host_parser.add_argument('--host-state', help='nagios $HOSTSTATE$', required=True)
     host_parser.add_argument('--host-address', help='nagios $HOSTADDRESS$', required=True)
